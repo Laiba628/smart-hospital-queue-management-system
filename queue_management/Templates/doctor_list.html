@@ -1,0 +1,409 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .doctor-card {
+        transition: all 0.35s ease;
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    .doctor-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    /* Doctor Photo */
+
+    .doctor-photo {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #e8f1ff;
+        box-shadow: 0 6px 18px rgba(13, 110, 253, 0.15);
+    }
+
+    /* Default Doctor Icon */
+
+    .doctor-icon {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: #e8f1ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+
+    .doctor-icon i {
+        font-size: 75px;
+        color: #0d6efd;
+    }
+
+    /* Search Box */
+
+    .search-box {
+        background: white;
+        border-radius: 18px;
+        padding: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Animations */
+
+    .doctor-title {
+        animation: fadeDown 0.7s ease;
+    }
+
+    .doctor-card {
+        animation: fadeUp 0.7s ease;
+    }
+
+    @keyframes fadeDown {
+
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+    @keyframes fadeUp {
+
+        from {
+            opacity: 0;
+            transform: translateY(25px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+    /* Buttons */
+
+    .btn {
+        transition: all 0.25s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+
+</style>
+
+
+<div class="container py-4">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="text-center mb-4 doctor-title">
+
+        <h2 class="fw-bold text-primary">
+            👨‍⚕️ Available Doctors
+        </h2>
+
+        <p class="text-muted">
+            Find the right specialist and book your appointment easily.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         SEARCH & FILTER
+    ====================================================== -->
+
+    <div class="search-box mb-5">
+
+        <form method="GET" class="row g-3">
+
+
+            <!-- DOCTOR SEARCH -->
+
+            <div class="col-md-5">
+
+                <label class="form-label fw-bold">
+                    🔍 Doctor Name
+                </label>
+
+                <input
+                    type="text"
+                    name="search"
+                    class="form-control"
+                    placeholder="Search Doctor..."
+                    value="{{ request.GET.search }}"
+                >
+
+            </div>
+
+
+            <!-- SPECIALIZATION -->
+
+            <div class="col-md-5">
+
+                <label class="form-label fw-bold">
+                    🩺 Specialization
+                </label>
+
+                <select
+                    name="specialization"
+                    class="form-select"
+                >
+
+                    <option value="">
+                        All Specializations
+                    </option>
+
+                    {% for sp in specializations %}
+
+                        <option
+                            value="{{ sp }}"
+                            {% if request.GET.specialization == sp %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ sp }}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- SEARCH BUTTON -->
+
+            <div class="col-md-2 d-flex align-items-end">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary w-100"
+                >
+
+                    🔍 Search
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- =====================================================
+         DOCTOR CARDS
+    ====================================================== -->
+
+    <div class="row">
+
+        {% for doctor in doctors %}
+
+        <div class="col-lg-4 col-md-6 mb-4">
+
+
+            <div class="card doctor-card shadow-sm border-0 h-100">
+
+
+                <div class="card-body text-center p-4">
+
+
+                    <!-- =================================================
+                         DOCTOR PHOTO
+                    ================================================== -->
+
+                    <div class="mb-3">
+
+                          {% if doctor.image %}
+                    <img
+                          src="{{ doctor.image.url }}"
+                          alt="{{ doctor.full_name }}"
+                          class="doctor-photo"
+                 >
+                       {% else %}
+                              <div class="doctor-icon">
+                              <i class="bi bi-person-circle"></i>
+                              </div>
+                     {% endif %}
+
+</div>
+
+                    <!-- =================================================
+                         DOCTOR NAME
+                    ================================================== -->
+
+                    <h4 class="fw-bold">
+
+                        {{ doctor.full_name }}
+
+                    </h4>
+
+
+                    <!-- =================================================
+                         SPECIALIZATION
+                    ================================================== -->
+
+                    <span class="badge bg-primary px-3 py-2">
+
+                        🩺 {{ doctor.specialization }}
+
+                    </span>
+
+
+                    <hr>
+
+
+                    <!-- =================================================
+                         CONSULTATION FEE
+                    ================================================== -->
+
+                    <p class="mb-2">
+
+                        💰
+
+                        <strong>
+                            Consultation Fee:
+                        </strong>
+
+                        Rs. {{ doctor.consultation_fee }}
+
+                    </p>
+
+
+                    <!-- =================================================
+                         AVAILABLE DAYS
+                    ================================================== -->
+
+                    <p class="mb-2">
+
+                        📅
+
+                        <strong>
+                            Available Days:
+                        </strong>
+
+                        <br>
+
+                        {{ doctor.available_days }}
+
+                    </p>
+
+
+                    <!-- =================================================
+                         AVAILABLE TIME
+                    ================================================== -->
+
+                    <p class="mb-3">
+
+                        🕒
+
+                        <strong>
+                            Timing:
+                        </strong>
+
+                        <br>
+
+                        {{ doctor.available_time }}
+
+                    </p>
+
+
+                    <!-- =================================================
+                         AVAILABILITY
+                    ================================================== -->
+
+                    {% if doctor.is_available %}
+
+                        <span class="badge bg-success px-3 py-2">
+
+                            🟢 Available
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-danger px-3 py-2">
+
+                            🔴 Not Available
+
+                        </span>
+
+                    {% endif %}
+
+
+                    <!-- =================================================
+                         BOOK APPOINTMENT
+                    ================================================== -->
+
+                    <div class="mt-4">
+
+                        <a
+                            href="{% url 'book_appointment_doctor' doctor.id %}"
+                            class="btn btn-primary w-100"
+                        >
+
+                            📅 Book Appointment
+
+                        </a>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% empty %}
+
+
+        <!-- =================================================
+             NO DOCTOR FOUND
+        ================================================== -->
+
+        <div class="col-12">
+
+            <div class="alert alert-danger text-center shadow-sm">
+
+                <h5>
+                    🔍 No Doctor Found
+                </h5>
+
+                <p class="mb-0">
+
+                    Please try another doctor name
+                    or specialization.
+
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

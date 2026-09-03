@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card shadow-lg border-0 rounded-4">
+
+                <div class="card-header bg-danger text-white text-center p-4">
+
+                    <h3 class="fw-bold mb-0">
+                        ⚠️ Cancel Appointment
+                    </h3>
+
+                </div>
+
+
+                <div class="card-body p-4 text-center">
+
+                    <div style="font-size:70px;">
+                        ❌
+                    </div>
+
+                    <h4 class="fw-bold mt-3">
+                        Are you sure?
+                    </h4>
+
+                    <p class="text-muted">
+                        Do you really want to cancel this appointment?
+                    </p>
+
+
+                    <div class="alert alert-light border text-start mt-4">
+
+                        <p class="mb-2">
+                            <strong>👤 Patient:</strong>
+                            {{ appointment.patient.full_name }}
+                        </p>
+
+                        <p class="mb-2">
+                            <strong>👨‍⚕️ Doctor:</strong>
+                            {{ appointment.doctor.full_name }}
+                        </p>
+
+                        <p class="mb-2">
+                            <strong>📅 Date:</strong>
+                            {{ appointment.appointment_date }}
+                        </p>
+
+                        <p class="mb-2">
+                            <strong>🕒 Time:</strong>
+                            {{ appointment.appointment_time }}
+                        </p>
+
+                        <p class="mb-0">
+                            <strong>🎫 Token:</strong>
+                            {{ appointment.token_number }}
+                        </p>
+
+                    </div>
+
+
+                    <div class="alert alert-warning mt-4">
+
+                        ⚠️ After cancellation, this appointment
+                        cannot be used again.
+
+                    </div>
+
+
+                    <form method="POST" class="mt-4">
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger btn-lg px-4">
+
+                            ❌ Yes, Cancel Appointment
+
+                        </button>
+
+                        <a
+                            href="{% url 'my_appointments' %}"
+                            class="btn btn-secondary btn-lg px-4 ms-2">
+
+                            ← Go Back
+
+                        </a>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,485 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .appointments-page {
+        max-width: 1150px;
+        margin: 0 auto;
+    }
+
+    .page-title {
+        animation: fadeDown 0.6s ease;
+    }
+
+    .appointment-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        animation: fadeUp 0.6s ease;
+    }
+
+    .appointment-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    .token-circle {
+        width: 82px;
+        height: 82px;
+        border-radius: 50%;
+        background: linear-gradient(
+            135deg,
+            #0d6efd,
+            #0dcaf0
+        );
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        font-weight: 700;
+        margin: auto;
+        box-shadow: 0 8px 20px rgba(13, 110, 253, 0.25);
+    }
+
+    .status-badge {
+        font-size: 14px;
+        padding: 9px 17px;
+        border-radius: 20px;
+    }
+
+    .appointment-info {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 15px;
+        height: 100%;
+    }
+
+    .important-message {
+        border-radius: 16px;
+    }
+
+    .action-btn {
+        transition: all 0.25s ease;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .empty-box {
+        background: #f8f9fa;
+        border-radius: 20px;
+        padding: 60px 20px;
+    }
+
+    @keyframes fadeDown {
+
+        from {
+            opacity: 0;
+            transform: translateY(-15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+    @keyframes fadeUp {
+
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+</style>
+
+
+<div class="container py-5">
+
+    <div class="appointments-page">
+
+
+        <!-- ================================================= -->
+        <!-- PAGE HEADER -->
+        <!-- ================================================= -->
+
+        <div class="text-center mb-4 page-title">
+
+            <h2 class="fw-bold text-primary">
+
+                📅 My Appointments
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                View and manage your hospital appointments.
+
+            </p>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- MESSAGES -->
+        <!-- ================================================= -->
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div
+                    class="alert
+                    {% if message.tags == 'error' %}
+                        alert-danger
+                    {% else %}
+                        alert-success
+                    {% endif %}
+                    alert-dismissible fade show"
+                    role="alert"
+                >
+
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                    ></button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <!-- ================================================= -->
+        <!-- IMPORTANT INSTRUCTIONS -->
+        <!-- ================================================= -->
+
+        <div class="alert alert-warning important-message shadow-sm mb-5">
+
+            <div class="text-center">
+
+                <h5 class="fw-bold mb-3">
+
+                    ⚠️ Important Instructions
+
+                </h5>
+
+                <p class="mb-1">
+
+                    Please visit the hospital physically on
+                    your appointment date.
+
+                </p>
+
+                <p class="mb-1">
+
+                    Bring your
+                    <strong>original CNIC</strong>.
+
+                </p>
+
+                <p class="mb-0">
+
+                    Keep your
+                    <strong>token number</strong>
+                    with you.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- APPOINTMENTS -->
+        <!-- ================================================= -->
+
+        {% if appointments %}
+
+            <div class="row g-4">
+
+                {% for appointment in appointments %}
+
+                    <div class="col-lg-6">
+
+
+                        <!-- ================================= -->
+                        <!-- APPOINTMENT CARD -->
+                        <!-- ================================= -->
+
+                        <div class="card appointment-card shadow-sm h-100">
+
+                            <div class="card-body p-4">
+
+
+                                <!-- ================================= -->
+                                <!-- TOKEN -->
+                                <!-- ================================= -->
+
+                                <div class="text-center mb-4">
+
+                                    <p class="text-muted mb-2">
+
+                                        Token Number
+
+                                    </p>
+
+                                    <div class="token-circle">
+
+                                        {{ appointment.token_number }}
+
+                                    </div>
+
+                                </div>
+
+
+                                <hr>
+
+
+                                <!-- ================================= -->
+                                <!-- DOCTOR -->
+                                <!-- ================================= -->
+
+                                <div class="mb-4">
+
+                                    <h5 class="fw-bold mb-2">
+
+                                        👨‍⚕️
+                                        {{ appointment.doctor.full_name }}
+
+                                    </h5>
+
+                                    <span class="badge bg-primary px-3 py-2">
+
+                                        🏥
+                                        {{ appointment.department }}
+
+                                    </span>
+
+                                </div>
+
+
+                                <!-- ================================= -->
+                                <!-- DATE / TIME -->
+                                <!-- ================================= -->
+
+                                <div class="row g-3">
+
+
+                                    <!-- DATE -->
+
+                                    <div class="col-6">
+
+                                        <div class="appointment-info">
+
+                                            <small class="text-muted">
+
+                                                Appointment Date
+
+                                            </small>
+
+                                            <div class="fw-bold mt-1">
+
+                                                📅
+                                                {{ appointment.appointment_date|date:"d M Y" }}
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- TIME -->
+
+                                    <div class="col-6">
+
+                                        <div class="appointment-info">
+
+                                            <small class="text-muted">
+
+                                                Appointment Time
+
+                                            </small>
+
+                                            <div class="fw-bold mt-1">
+
+                                                🕒
+                                                {{ appointment.appointment_time|time:"h:i A" }}
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- ================================= -->
+                                <!-- STATUS -->
+                                <!-- ================================= -->
+
+                                <div class="text-center mt-4">
+
+                                    {% if appointment.status == "Pending" %}
+
+                                        <span
+                                            class="badge bg-warning text-dark status-badge"
+                                        >
+
+                                            ⏳ Pending
+
+                                        </span>
+
+
+                                    {% elif appointment.status == "Confirmed" %}
+
+                                        <span
+                                            class="badge bg-success status-badge"
+                                        >
+
+                                            ✅ Confirmed
+
+                                        </span>
+
+
+                                    {% elif appointment.status == "Completed" %}
+
+                                        <span
+                                            class="badge bg-info text-dark status-badge"
+                                        >
+
+                                            ✔️ Completed
+
+                                        </span>
+
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <!-- ================================= -->
+                                <!-- ACTION BUTTONS -->
+                                <!-- ================================= -->
+
+                                <div class="text-center mt-4">
+
+
+                                    <!-- TOKEN SLIP -->
+
+                                    <a
+                                        href="{% url 'token_slip' appointment.id %}"
+                                        class="btn btn-outline-primary action-btn"
+                                    >
+
+                                        🎫 View Token Slip
+
+                                    </a>
+
+
+                                    <!-- CANCEL -->
+
+                                    {% if appointment.status == "Pending" %}
+
+                                        <form
+                                            method="POST"
+                                            action="{% url 'cancel_appointment' appointment.id %}"
+                                            class="d-inline"
+                                            onsubmit="return confirm('Are you sure you want to cancel this appointment?');"
+                                        >
+
+                                            {% csrf_token %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-outline-danger action-btn ms-2"
+                                            >
+
+                                                ❌ Cancel Appointment
+
+                                            </button>
+
+                                        </form>
+
+                                    {% endif %}
+
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- ================================================= -->
+            <!-- NO APPOINTMENTS -->
+            <!-- ================================================= -->
+
+            <div class="empty-box text-center shadow-sm">
+
+                <div style="font-size: 75px;">
+
+                    📅
+
+                </div>
+
+                <h3 class="fw-bold mt-3">
+
+                    No Appointments Yet
+
+                </h3>
+
+                <p class="text-muted">
+
+                    You haven't booked any appointments yet.
+
+                </p>
+
+                <a
+                    href="{% url 'book_appointment' %}"
+                    class="btn btn-primary btn-lg action-btn"
+                >
+
+                    📅 Book Your First Appointment
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .registration-wrapper {
+        max-width: 850px;
+        margin: 40px auto;
+    }
+
+    .registration-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .registration-header {
+        background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .registration-header h2 {
+        font-weight: 700;
+    }
+
+    .registration-info {
+        background: #e7f1ff;
+        border: 1px solid #9ec5fe;
+        border-radius: 15px;
+        padding: 18px;
+    }
+
+    .registration-info h5 {
+        font-weight: 700;
+    }
+
+    .registration-info ul {
+        margin-bottom: 0;
+    }
+
+    .form-section {
+        padding: 30px;
+    }
+
+    .form-section p {
+        margin-bottom: 18px;
+    }
+
+    .form-section label {
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .form-section input,
+    .form-section select,
+    .form-section textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+    }
+
+    .form-section textarea {
+        min-height: 100px;
+    }
+
+    .register-btn {
+        padding: 12px 35px;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 10px;
+    }
+
+</style>
+
+
+<div class="registration-wrapper">
+
+
+    <div class="card registration-card">
+
+
+        <!-- HEADER -->
+
+        <div class="registration-header">
+
+            <h2>
+                👤 Patient Registration
+            </h2>
+
+            <p class="mb-0">
+                Register your information for OPD appointment booking.
+            </p>
+
+        </div>
+
+
+        <!-- BODY -->
+
+        <div class="form-section">
+
+
+            <!-- SUCCESS MESSAGE -->
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <div class="alert alert-success alert-dismissible fade show">
+
+                        ✅ {{ message }}
+
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert">
+                        </button>
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+
+            <!-- INFORMATION -->
+
+            <div class="registration-info mb-4">
+
+                <h5>
+                    ℹ️ Important Information
+                </h5>
+
+                <ul>
+
+                    <li>
+                        CNIC is compulsory for hospital registration.
+                    </li>
+
+                    <li>
+                        Please enter your information correctly.
+                    </li>
+
+                    <li>
+                        After registration, you can book an OPD appointment.
+                    </li>
+
+                    <li>
+                        You must bring your original CNIC when visiting
+                        the hospital.
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- FORM -->
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                {{ form.as_p }}
+
+
+                <!-- BUTTON -->
+
+                <div class="text-center mt-4">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary register-btn">
+
+                        👤 Register Patient
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

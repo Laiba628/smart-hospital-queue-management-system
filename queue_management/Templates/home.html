@@ -1,0 +1,1159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero {
+    min-height: 480px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+    color: white;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    right: -80px;
+    top: -80px;
+}
+
+.hero-content {
+    animation: fadeInLeft 0.8s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-icon {
+    font-size: 150px;
+    animation: float 3s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-buttons .btn {
+    border-radius: 12px;
+    padding: 12px 22px;
+    transition: all 0.25s ease;
+}
+
+.hero-buttons .btn:hover {
+    transform: translateY(-3px);
+}
+
+
+/* =====================================================
+   STATISTICS
+===================================================== */
+
+.stat-card {
+    border: none;
+    border-radius: 18px;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.12) !important;
+}
+
+.stat-icon {
+    font-size: 45px;
+    margin-bottom: 8px;
+}
+
+.stat-number {
+    font-size: 32px;
+}
+
+
+/* =====================================================
+   DOCTOR SLIDER
+===================================================== */
+
+.doctor-slider-section {
+    margin-top: 25px;
+    margin-bottom: 55px;
+}
+
+.doctor-slider-title {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.doctor-slider-title h2 {
+    color: #0d6efd;
+    font-weight: 700;
+}
+
+.doctor-slider-title p {
+    color: #6c757d;
+}
+
+
+/* Main slider */
+
+.doctor-slider {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+    background: #f8f9fa;
+}
+
+
+/* Individual slides */
+
+.doctor-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease;
+}
+
+.doctor-slide.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* Images */
+
+.doctor-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
+/* Dark overlay */
+
+.doctor-slide::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.75),
+        rgba(0,0,0,0.05) 65%
+    );
+}
+
+
+/* Slide text */
+
+.slide-content {
+    position: absolute;
+    z-index: 5;
+    left: 35px;
+    bottom: 35px;
+    color: white;
+}
+
+.slide-content h3 {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.slide-content p {
+    font-size: 18px;
+    margin: 0;
+}
+
+
+/* Previous / next buttons */
+
+.slider-btn {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 58px;
+    height: 58px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(255,255,255,0.95);
+    color: #0d6efd;
+
+    font-size: 35px;
+    font-weight: bold;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+}
+
+.slider-btn:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.08);
+}
+
+.slider-prev {
+    left: 20px;
+}
+
+.slider-next {
+    right: 20px;
+}
+
+
+/* Dots */
+
+.slider-dots {
+    position: absolute;
+    z-index: 10;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    gap: 10px;
+}
+
+.slider-dot {
+    width: 12px;
+    height: 12px;
+
+    border-radius: 50%;
+    border: none;
+
+    background: rgba(255,255,255,0.65);
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+}
+
+.slider-dot.active {
+    width: 30px;
+    border-radius: 10px;
+    background: #0d6efd;
+}
+
+
+/* =====================================================
+   FEATURES
+===================================================== */
+
+.feature-card {
+    border: none;
+    border-radius: 18px;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12) !important;
+}
+
+.feature-icon {
+    font-size: 50px;
+}
+
+
+/* =====================================================
+   HOSPITAL INFORMATION
+===================================================== */
+
+.info-section {
+    background: #f8fbff;
+    border: 1px solid #e4efff;
+    border-radius: 24px;
+    padding: 45px 35px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.info-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.info-title h2 {
+    color: #0d6efd;
+    font-weight: 700;
+}
+
+.info-title p {
+    color: #6c757d;
+}
+
+
+.info-card {
+    background: white;
+    border: none;
+    border-radius: 18px;
+
+    height: 100%;
+
+    padding: 28px 20px;
+
+    text-align: center;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+}
+
+.info-icon {
+    width: 65px;
+    height: 65px;
+
+    margin: 0 auto 15px;
+
+    border-radius: 16px;
+
+    background: #e8f1ff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 32px;
+}
+
+.info-card h4 {
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.info-card p {
+    color: #6c757d;
+    margin-bottom: 8px;
+}
+
+.info-card a {
+    color: #0d6efd;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.info-card a:hover {
+    text-decoration: underline;
+}
+
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+@keyframes fadeInLeft {
+
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+}
+
+@keyframes float {
+
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .hero {
+        min-height: auto;
+        text-align: center;
+    }
+
+    .hero-content {
+        padding: 40px 25px !important;
+    }
+
+    .hero h1 {
+        font-size: 2.3rem;
+    }
+
+    .hero h2 {
+        font-size: 1.5rem;
+    }
+
+    .hero-icon {
+        font-size: 100px;
+        padding-bottom: 35px;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .doctor-slider {
+        height: 350px;
+    }
+
+    .slide-content {
+        left: 20px;
+        bottom: 25px;
+    }
+
+    .slide-content h3 {
+        font-size: 22px;
+    }
+
+    .slide-content p {
+        font-size: 15px;
+    }
+
+    .slider-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 28px;
+    }
+
+    .info-section {
+        padding: 30px 15px;
+    }
+
+}
+
+</style>
+
+
+<div class="container py-4">
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<div class="hero shadow-lg mb-5">
+
+    <div class="row w-100 align-items-center">
+
+        <div class="col-lg-7 p-5 hero-content">
+
+            <h1 class="display-4 fw-bold">
+                Smart Hospital
+            </h1>
+
+            <h2 class="fw-bold mb-3">
+                Queue Management System
+            </h2>
+
+            <p class="lead">
+                Manage hospital appointments, doctors and
+                patient queues quickly and efficiently.
+            </p>
+
+            <div class="mt-4 hero-buttons">
+
+                <a
+                    href="{% url 'book_appointment' %}"
+                    class="btn btn-light btn-lg me-2"
+                >
+                    📅 Book Appointment
+                </a>
+
+                <a
+                    href="{% url 'doctor_list' %}"
+                    class="btn btn-outline-light btn-lg"
+                >
+                    👨‍⚕️ Find Doctor
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-5 text-center">
+
+            <div class="hero-icon">
+                🏥
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     STATISTICS
+===================================================== -->
+
+<div class="row g-4 mb-5">
+
+
+    <div class="col-md-6 col-lg-3">
+
+        <div class="card stat-card shadow-sm text-center">
+
+            <div class="card-body p-4">
+
+                <div class="stat-icon">
+                    👨‍⚕️
+                </div>
+
+                <h2 class="fw-bold text-primary stat-number">
+                    {{ total_doctors }}
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Total Doctors
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6 col-lg-3">
+
+        <div class="card stat-card shadow-sm text-center">
+
+            <div class="card-body p-4">
+
+                <div class="stat-icon">
+                    👤
+                </div>
+
+                <h2 class="fw-bold text-success stat-number">
+                    {{ total_patients }}
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Registered Patients
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6 col-lg-3">
+
+        <div class="card stat-card shadow-sm text-center">
+
+            <div class="card-body p-4">
+
+                <div class="stat-icon">
+                    📅
+                </div>
+
+                <h2 class="fw-bold text-warning stat-number">
+                    {{ total_appointments }}
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Total Appointments
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6 col-lg-3">
+
+        <div class="card stat-card shadow-sm text-center">
+
+            <div class="card-body p-4">
+
+                <div class="stat-icon">
+                    ✅
+                </div>
+
+                <h2 class="fw-bold text-info stat-number">
+                    {{ completed }}
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Completed Appointments
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     DOCTOR IMAGE SLIDER
+===================================================== -->
+
+<div class="doctor-slider-section">
+
+    <div class="doctor-slider-title">
+
+        <h2>
+            👨‍⚕️ Meet Our Doctors
+        </h2>
+
+        <p>
+            Experienced medical professionals ready to care for you.
+        </p>
+
+    </div>
+
+
+    <div class="doctor-slider">
+
+
+        <!-- SLIDE 1 -->
+
+        <div class="doctor-slide active">
+
+            <img
+                src="{% static 'images/doctors/doctor1.png' %}"
+                alt="Doctor in consultation room"
+            >
+
+            <div class="slide-content">
+
+                <h3>
+                    Trusted Medical Team
+                </h3>
+
+                <p>
+                    Professional healthcare in a comfortable environment.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SLIDE 2 -->
+
+        <div class="doctor-slide">
+
+            <img
+                src="{% static 'images/doctors/doctor2.png' %}"
+                alt="Doctor working in hospital"
+            >
+
+            <div class="slide-content">
+
+                <h3>
+                    Experienced Doctors
+                </h3>
+
+                <p>
+                    Quality healthcare from dedicated professionals.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SLIDE 3 -->
+
+        <div class="doctor-slide">
+
+            <img
+                src="{% static 'images/doctors/doctor3.png' %}"
+                alt="Female doctor in consultation room"
+            >
+
+            <div class="slide-content">
+
+                <h3>
+                    Patient-Centered Care
+                </h3>
+
+                <p>
+                    Your health and comfort are our priority.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SLIDE 4 -->
+
+        <div class="doctor-slide">
+
+            <img
+                src="{% static 'images/doctors/doctor4.png' %}"
+                alt="Doctor examining patient"
+            >
+
+            <div class="slide-content">
+
+                <h3>
+                    Modern Healthcare
+                </h3>
+
+                <p>
+                    Organized and efficient medical services.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SLIDE 5 -->
+
+        <div class="doctor-slide">
+
+            <img
+                src="{% static 'images/doctors/doctor5.png' %}"
+                alt="Doctor in hospital office"
+            >
+
+            <div class="slide-content">
+
+                <h3>
+                    Quality Medical Services
+                </h3>
+
+                <p>
+                    Find the right doctor for your consultation.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- PREVIOUS -->
+
+        <button
+            type="button"
+            class="slider-btn slider-prev"
+            onclick="changeDoctorSlide(-1)"
+        >
+            ‹
+        </button>
+
+
+        <!-- NEXT -->
+
+        <button
+            type="button"
+            class="slider-btn slider-next"
+            onclick="changeDoctorSlide(1)"
+        >
+            ›
+        </button>
+
+
+        <!-- DOTS -->
+
+        <div class="slider-dots">
+
+            <button
+                type="button"
+                class="slider-dot active"
+                onclick="goToDoctorSlide(0)"
+            ></button>
+
+            <button
+                type="button"
+                class="slider-dot"
+                onclick="goToDoctorSlide(1)"
+            ></button>
+
+            <button
+                type="button"
+                class="slider-dot"
+                onclick="goToDoctorSlide(2)"
+            ></button>
+
+            <button
+                type="button"
+                class="slider-dot"
+                onclick="goToDoctorSlide(3)"
+            ></button>
+
+            <button
+                type="button"
+                class="slider-dot"
+                onclick="goToDoctorSlide(4)"
+            ></button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     FEATURES
+===================================================== -->
+
+<div class="text-center mb-4">
+
+    <h2 class="fw-bold text-primary">
+        Why Use Smart Hospital?
+    </h2>
+
+    <p class="text-muted">
+        Simple, fast and organized hospital management.
+    </p>
+
+</div>
+
+
+<div class="row g-4 mb-5">
+
+
+    <div class="col-md-4">
+
+        <div class="card feature-card shadow-sm">
+
+            <div class="card-body text-center p-4">
+
+                <div class="feature-icon mb-3">
+                    📅
+                </div>
+
+                <h4 class="fw-bold">
+                    Easy Appointments
+                </h4>
+
+                <p class="text-muted">
+                    Book appointments with available doctors
+                    without unnecessary waiting.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card feature-card shadow-sm">
+
+            <div class="card-body text-center p-4">
+
+                <div class="feature-icon mb-3">
+                    🎫
+                </div>
+
+                <h4 class="fw-bold">
+                    Token Management
+                </h4>
+
+                <p class="text-muted">
+                    Get your appointment token and easily
+                    track your queue position.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card feature-card shadow-sm">
+
+            <div class="card-body text-center p-4">
+
+                <div class="feature-icon mb-3">
+                    👨‍⚕️
+                </div>
+
+                <h4 class="fw-bold">
+                    Find Doctors
+                </h4>
+
+                <p class="text-muted">
+                    Search doctors by name and specialization
+                    and view their profiles.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     HOSPITAL INFORMATION
+===================================================== -->
+
+<div class="info-section">
+
+    <div class="info-title">
+
+        <h2>
+            Hospital Information
+        </h2>
+
+        <p>
+            Need help or want to know more about Smart Hospital?
+            Get in touch with us.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        <!-- CONTACT -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    📞
+                </div>
+
+                <h4>
+                    Contact Us
+                </h4>
+
+                <p>
+                    Main Helpline
+                </p>
+
+                <a href="tel:+923001234567">
+                    +92 300 1234567
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- EMERGENCY -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    ☎️
+                </div>
+
+                <h4>
+                    Emergency
+                </h4>
+
+                <p>
+                    Hospital Emergency
+                </p>
+
+                <a href="tel:+924212345678">
+                    +92 42 12345678
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    📧
+                </div>
+
+                <h4>
+                    Email Us
+                </h4>
+
+                <p>
+                    General Queries
+                </p>
+
+                <a href="mailto:info@smarthospital.com">
+                    info@smarthospital.com
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOCATION -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    📍
+                </div>
+
+                <h4>
+                    Location
+                </h4>
+
+                <p>
+                    Smart Hospital
+                </p>
+
+                <a
+                    href="https://www.google.com/maps/search/?api=1&query=Smart+Hospital+Lahore"
+                    target="_blank"
+                >
+                    View Location →
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     SLIDER JAVASCRIPT
+===================================================== -->
+
+<script>
+
+let currentDoctorSlide = 0;
+
+const doctorSlides =
+    document.querySelectorAll(".doctor-slide");
+
+const doctorDots =
+    document.querySelectorAll(".slider-dot");
+
+
+function showDoctorSlide(index) {
+
+    doctorSlides.forEach(
+        slide => slide.classList.remove("active")
+    );
+
+    doctorDots.forEach(
+        dot => dot.classList.remove("active")
+    );
+
+
+    doctorSlides[index].classList.add("active");
+
+    doctorDots[index].classList.add("active");
+
+    currentDoctorSlide = index;
+}
+
+
+function changeDoctorSlide(direction) {
+
+    currentDoctorSlide += direction;
+
+
+    if (currentDoctorSlide >= doctorSlides.length) {
+
+        currentDoctorSlide = 0;
+
+    }
+
+
+    if (currentDoctorSlide < 0) {
+
+        currentDoctorSlide =
+            doctorSlides.length - 1;
+
+    }
+
+
+    showDoctorSlide(currentDoctorSlide);
+}
+
+
+function goToDoctorSlide(index) {
+
+    showDoctorSlide(index);
+
+}
+
+
+/* Automatically change every 2 seconds */
+
+setInterval(function() {
+
+    changeDoctorSlide(1);
+
+}, 2000);
+
+</script>
+
+{% endblock %}

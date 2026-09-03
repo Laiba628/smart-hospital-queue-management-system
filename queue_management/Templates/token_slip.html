@@ -1,0 +1,367 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .token-wrapper {
+        max-width: 750px;
+        margin: 40px auto;
+    }
+
+    .token-card {
+        border: none;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        animation: slideUp 0.7s ease;
+    }
+
+    .token-header {
+        background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .token-number {
+        font-size: 75px;
+        font-weight: 800;
+        color: #0d6efd;
+        line-height: 1;
+    }
+
+    .info-box {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 18px;
+        height: 100%;
+    }
+
+    .info-box i {
+        font-size: 25px;
+        color: #0d6efd;
+    }
+
+    .print-btn {
+        transition: 0.3s;
+    }
+
+    .print-btn:hover {
+        transform: translateY(-3px);
+    }
+
+    .important-note {
+        border-radius: 15px;
+        padding: 20px;
+    }
+
+    @keyframes slideUp {
+
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+    @media print {
+
+        body * {
+            visibility: hidden;
+        }
+
+        .token-card,
+        .token-card * {
+            visibility: visible;
+        }
+
+        .token-card {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            box-shadow: none;
+        }
+
+        .print-btn,
+        .no-print {
+            display: none !important;
+        }
+
+    }
+
+</style>
+
+
+<div class="token-wrapper">
+
+    <div class="card token-card">
+
+        <!-- HEADER -->
+
+        <div class="token-header">
+
+            <h2 class="fw-bold mb-2">
+                🏥 Smart Hospital
+            </h2>
+
+            <p class="mb-0">
+                OPD Appointment Confirmation
+            </p>
+
+        </div>
+
+
+        <!-- BODY -->
+
+        <div class="card-body p-4">
+
+
+            <!-- TOKEN -->
+
+            <div class="text-center mb-4">
+
+                <p class="text-muted mb-2">
+                    Your Token Number
+                </p>
+
+                <div class="token-number">
+
+                    {{ appointment.token_number }}
+
+                </div>
+
+                <span class="badge bg-success px-3 py-2">
+
+                    {{ appointment.status }}
+
+                </span>
+
+            </div>
+
+
+            <hr>
+
+
+            <!-- APPOINTMENT DETAILS -->
+
+            <div class="row g-3 mt-2">
+
+
+                <!-- PATIENT -->
+
+                <div class="col-md-6">
+
+                    <div class="info-box">
+
+                        <i class="bi bi-person-fill"></i>
+
+                        <h6 class="fw-bold mt-2">
+                            Patient
+                        </h6>
+
+                        <p class="mb-0">
+
+                            {{ appointment.patient.full_name }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DOCTOR -->
+
+                <div class="col-md-6">
+
+                    <div class="info-box">
+
+                        <i class="bi bi-person-badge-fill"></i>
+
+                        <h6 class="fw-bold mt-2">
+                            Doctor
+                        </h6>
+
+                        <p class="mb-0">
+
+                            {{ appointment.doctor.full_name }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DEPARTMENT -->
+
+                <div class="col-md-6">
+
+                    <div class="info-box">
+
+                        <i class="bi bi-heart-pulse-fill"></i>
+
+                        <h6 class="fw-bold mt-2">
+                            Department
+                        </h6>
+
+                        <p class="mb-0">
+
+                            {{ appointment.department }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FEE -->
+
+                <div class="col-md-6">
+
+                    <div class="info-box">
+
+                        <i class="bi bi-cash-stack"></i>
+
+                        <h6 class="fw-bold mt-2">
+                            Consultation Fee
+                        </h6>
+
+                        <p class="mb-0">
+
+                            Rs. {{ appointment.doctor.consultation_fee }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DATE -->
+
+                <div class="col-md-6">
+
+                    <div class="info-box">
+
+                        <i class="bi bi-calendar-event"></i>
+
+                        <h6 class="fw-bold mt-2">
+                            Appointment Date
+                        </h6>
+
+                        <p class="mb-0">
+
+                            {{ appointment.appointment_date }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SELECTED TIME -->
+
+                <div class="col-md-6">
+
+                    <div class="info-box">
+
+                        <i class="bi bi-clock-fill"></i>
+
+                        <h6 class="fw-bold mt-2">
+                            Your Selected Time
+                        </h6>
+
+                        <p class="mb-0">
+
+                            {{ appointment.appointment_time }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+            
+            <!-- IMPORTANT REAL-WORLD INSTRUCTION -->
+
+            <div class="alert alert-warning important-note mt-3">
+
+                <h5 class="fw-bold">
+
+                    ⚠️ Important Instructions
+
+                </h5>
+
+                <ul class="mb-0">
+
+                    <li>
+                        This is an <strong>online appointment booking</strong>.
+                    </li>
+
+                    <li>
+                        Please visit the hospital physically
+                        on your appointment date.
+                    </li>
+
+                    <li>
+                        Bring your <strong>original CNIC</strong>
+                        for hospital verification.
+                    </li>
+
+                    <li>
+                        Keep this token number with you.
+                    </li>
+
+                    <li>
+                        Please arrive before your selected
+                        appointment time.
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="text-center mt-4 no-print">
+
+                <button
+                    onclick="window.print()"
+                    class="btn btn-primary btn-lg print-btn me-2">
+
+                    🖨️ Print Token
+
+                </button>
+
+
+                <a
+                    href="{% url 'my_appointments' %}"
+                    class="btn btn-outline-primary btn-lg">
+
+                    📅 My Appointments
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

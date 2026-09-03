@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .update-wrapper {
+        max-width: 750px;
+        margin: 40px auto;
+    }
+
+    .update-card {
+        border: none;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .update-header {
+        background: linear-gradient(135deg, #ffc107, #ffca2c);
+        color: #212529;
+        padding: 28px;
+        text-align: center;
+    }
+
+    .update-header i {
+        font-size: 45px;
+    }
+
+    .update-header h2 {
+        font-weight: 700;
+        margin-top: 8px;
+        margin-bottom: 5px;
+    }
+
+    .appointment-info {
+        background: #f8f9fa;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    .info-item {
+        padding: 10px;
+    }
+
+    .info-icon {
+        font-size: 25px;
+        color: #0d6efd;
+        margin-right: 8px;
+    }
+
+    .form-section {
+        background: #ffffff;
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid #e9ecef;
+    }
+
+    .form-section label {
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-section select,
+    .form-section input,
+    .form-section textarea {
+        border-radius: 10px;
+    }
+
+    .update-btn {
+        transition: 0.25s ease;
+    }
+
+    .update-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .back-btn {
+        transition: 0.25s ease;
+    }
+
+    .back-btn:hover {
+        transform: translateY(-2px);
+    }
+
+</style>
+
+
+<div class="update-wrapper">
+
+    <div class="card update-card">
+
+
+        <!-- ================= HEADER ================= -->
+
+        <div class="update-header">
+
+            <i class="bi bi-pencil-square"></i>
+
+            <h2>
+                Update Appointment
+            </h2>
+
+            <p class="mb-0">
+                Manage the current appointment status.
+            </p>
+
+        </div>
+
+
+        <!-- ================= BODY ================= -->
+
+        <div class="card-body p-4">
+
+
+            <!-- ================= APPOINTMENT INFORMATION ================= -->
+
+            <div class="appointment-info">
+
+                <h5 class="fw-bold text-primary mb-3">
+
+                    📋 Appointment Information
+
+                </h5>
+
+
+                <div class="row">
+
+
+                    <div class="col-md-6 info-item">
+
+                        <span class="info-icon">
+                            🎫
+                        </span>
+
+                        <strong>
+                            Token:
+                        </strong>
+
+                        {{ appointment.token_number }}
+
+                    </div>
+
+
+                    <div class="col-md-6 info-item">
+
+                        <span class="info-icon">
+                            👤
+                        </span>
+
+                        <strong>
+                            Patient:
+                        </strong>
+
+                        {{ appointment.patient.full_name }}
+
+                    </div>
+
+
+                    <div class="col-md-6 info-item">
+
+                        <span class="info-icon">
+                            👨‍⚕️
+                        </span>
+
+                        <strong>
+                            Doctor:
+                        </strong>
+
+                        {{ appointment.doctor.full_name }}
+
+                    </div>
+
+
+                    <div class="col-md-6 info-item">
+
+                        <span class="info-icon">
+                            🩺
+                        </span>
+
+                        <strong>
+                            Department:
+                        </strong>
+
+                        {{ appointment.department }}
+
+                    </div>
+
+
+                    <div class="col-md-6 info-item">
+
+                        <span class="info-icon">
+                            📅
+                        </span>
+
+                        <strong>
+                            Date:
+                        </strong>
+
+                        {{ appointment.appointment_date }}
+
+                    </div>
+
+
+                    <div class="col-md-6 info-item">
+
+                        <span class="info-icon">
+                            🕒
+                        </span>
+
+                        <strong>
+                            Time:
+                        </strong>
+
+                        {{ appointment.appointment_time }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= STATUS FORM ================= -->
+
+            <div class="form-section">
+
+                <h5 class="fw-bold mb-3">
+
+                    🔄 Change Appointment Status
+
+                </h5>
+
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+
+                    {{ form.as_p }}
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="d-flex gap-2 mt-4">
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-success btn-lg update-btn">
+
+                            ✅ Update Status
+
+                        </button>
+
+
+                        <a
+                            href="{% url 'queue_dashboard' %}"
+                            class="btn btn-outline-secondary btn-lg back-btn">
+
+                            ← Back to Queue
+
+                        </a>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

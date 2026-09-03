@@ -1,0 +1,22 @@
+venv/
+.venv/
+
+__pycache__/
+*.py[cod]
+
+*.log
+
+db.sqlite3
+
+.vscode/
+.idea/
+
+Thumbs.db
+.DS_Store
+
+.env
+
+*.egg-info/
+dist/
+build/
+Python Files/

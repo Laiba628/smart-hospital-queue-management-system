@@ -1,0 +1,654 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .appointment-wrapper {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .appointment-card {
+        border: none;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.10);
+    }
+
+    .appointment-header {
+        background: linear-gradient(135deg, #198754, #157347);
+        color: white;
+        padding: 32px 25px;
+        text-align: center;
+    }
+
+    .appointment-header h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .appointment-header p {
+        margin: 0;
+        font-size: 1.05rem;
+        opacity: 0.95;
+    }
+
+    .appointment-body {
+        padding: 35px;
+        background: white;
+    }
+
+    .appointment-field {
+        margin-bottom: 22px;
+    }
+
+    .appointment-body .form-label {
+        display: block;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #212529;
+    }
+
+    .appointment-body select,
+    .appointment-body input[type="date"],
+    .appointment-body input[type="time"] {
+        width: 100% !important;
+        min-height: 50px;
+        padding: 10px 14px;
+        border: 1px solid #dee2e6;
+        border-radius: 11px;
+        background-color: #fff;
+        font-size: 1rem;
+        color: #212529;
+        box-sizing: border-box;
+        transition: all 0.2s ease;
+    }
+
+    .appointment-body select:focus,
+    .appointment-body input[type="date"]:focus,
+    .appointment-body input[type="time"]:focus {
+        border-color: #198754;
+        box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.15);
+        outline: none;
+    }
+
+    .appointment-body select:hover,
+    .appointment-body input[type="date"]:hover,
+    .appointment-body input[type="time"]:hover {
+        border-color: #198754;
+    }
+
+    /* SELECTED DOCTOR */
+
+    .selected-doctor-box {
+        background: linear-gradient(135deg, #eef6ff, #f8fbff);
+        border: 1px solid #b6d4fe;
+        border-radius: 12px;
+        padding: 15px 18px;
+        color: #084298;
+    }
+
+    .selected-doctor-box strong {
+        font-size: 1.05rem;
+    }
+
+    /* CAPACITY */
+
+    .capacity-box {
+        background: linear-gradient(135deg, #cff4fc, #e7f9fc);
+        border: 1px solid #9eeaf9;
+        border-radius: 13px;
+        padding: 18px 20px;
+        color: #055160;
+    }
+
+    .capacity-box h5 {
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .capacity-box p {
+        margin-bottom: 0;
+    }
+
+    /* TIME SLOTS */
+
+    .slots-box {
+        margin-top: 25px;
+        padding: 20px;
+        border-radius: 16px;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+    }
+
+    .slots-title {
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #212529;
+    }
+
+    .slot-card {
+        border: 1px solid #dee2e6;
+        background: white;
+        border-radius: 12px;
+        padding: 14px;
+        margin-bottom: 10px;
+        transition: all 0.2s ease;
+    }
+
+    .slot-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07);
+    }
+
+    .slot-time {
+        font-weight: 700;
+        color: #084298;
+    }
+
+    .slot-available {
+        color: #198754;
+        font-weight: 600;
+    }
+
+    .slot-full {
+        color: #dc3545;
+        font-weight: 700;
+    }
+
+    .appointment-help {
+        color: #6c757d;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-top: 8px;
+    }
+
+    /* BOOK BUTTON */
+
+    .book-appointment-btn {
+        min-width: 300px;
+        min-height: 52px;
+        border-radius: 11px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        border: none;
+        transition: all 0.25s ease;
+    }
+
+    .book-appointment-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(25, 135, 84, 0.22);
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 576px) {
+
+        .appointment-header {
+            padding: 25px 18px;
+        }
+
+        .appointment-header h2 {
+            font-size: 1.55rem;
+        }
+
+        .appointment-header p {
+            font-size: 0.95rem;
+        }
+
+        .appointment-body {
+            padding: 22px 18px;
+        }
+
+        .appointment-body select,
+        .appointment-body input[type="date"],
+        .appointment-body input[type="time"] {
+            min-height: 48px;
+            font-size: 0.95rem;
+        }
+
+        .book-appointment-btn {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .appointment-help {
+            font-size: 0.88rem;
+        }
+    }
+
+</style>
+
+
+<div class="container py-5">
+
+    <div class="appointment-wrapper">
+
+        <div class="card appointment-card">
+
+            <!-- ================= HEADER ================= -->
+
+            <div class="appointment-header">
+
+                <h2>
+                    📅 Book Appointment
+                </h2>
+
+                {% if selected_doctor %}
+
+                    <p>
+                        Book your appointment with
+                        {{ selected_doctor.full_name }}.
+                    </p>
+
+                {% else %}
+
+                    <p>
+                        Select your doctor, date and preferred time.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ================= BODY ================= -->
+
+            <div class="appointment-body">
+
+
+                <!-- ================= MESSAGES ================= -->
+
+                {% if messages %}
+
+                    {% for message in messages %}
+
+                        <div
+                            class="alert alert-success alert-dismissible fade show"
+                            role="alert"
+                        >
+
+                            <i class="bi bi-check-circle me-2"></i>
+
+                            {{ message }}
+
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                            ></button>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+
+                <!-- ================= FORM ERRORS ================= -->
+
+                {% if form.non_field_errors %}
+
+                    <div class="alert alert-danger">
+
+                        <strong>
+                            ⚠️ Appointment Issue
+                        </strong>
+
+                        {% for error in form.non_field_errors %}
+
+                            <div class="mt-1">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- ================= FORM ================= -->
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+
+                    <!-- ================= PATIENT ================= -->
+
+                    <div class="appointment-field">
+
+                        <label
+                            for="{{ form.patient.id_for_label }}"
+                            class="form-label"
+                        >
+                            👤 Select Patient
+                        </label>
+
+                        {{ form.patient }}
+
+                        {% if form.patient.errors %}
+
+                            <div class="text-danger small mt-2">
+                                {{ form.patient.errors }}
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- ================= DOCTOR ================= -->
+
+                    {% if selected_doctor %}
+
+                        <div class="appointment-field">
+
+                            <label class="form-label">
+                                👨‍⚕️ Selected Doctor
+                            </label>
+
+                            <div class="selected-doctor-box">
+
+                                <strong>
+                                    👨‍⚕️
+                                    {{ selected_doctor.full_name }}
+                                </strong>
+
+                                <br>
+
+                                <small>
+                                    🩺
+                                    {{ selected_doctor.specialization }}
+                                </small>
+
+                            </div>
+
+                            <input
+                                type="hidden"
+                                name="doctor"
+                                value="{{ selected_doctor.id }}"
+                            >
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="appointment-field">
+
+                            <label
+                                for="{{ form.doctor.id_for_label }}"
+                                class="form-label"
+                            >
+                                👨‍⚕️ Select Doctor
+                            </label>
+
+                            {{ form.doctor }}
+
+                            {% if form.doctor.errors %}
+
+                                <div class="text-danger small mt-2">
+                                    {{ form.doctor.errors }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- ================= DATE ================= -->
+
+                    <div class="appointment-field">
+
+                        <label
+                            for="{{ form.appointment_date.id_for_label }}"
+                            class="form-label"
+                        >
+                            📅 Appointment Date
+                        </label>
+
+                        {{ form.appointment_date }}
+
+                        {% if form.appointment_date.errors %}
+
+                            <div class="text-danger small mt-2">
+                                {{ form.appointment_date.errors }}
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- ================= TIME ================= -->
+
+                    <div class="appointment-field">
+
+                        <label
+                            for="{{ form.appointment_time.id_for_label }}"
+                            class="form-label"
+                        >
+                            🕒 Preferred Appointment Time
+                        </label>
+
+                       <select
+    name="appointment_time"
+    id="id_appointment_time"
+    class="form-select">
+    <option value="">--------- Select Time ---------</option>
+
+    <option value="09:00">09:00 AM - 09:15 AM</option>
+    <option value="09:15">09:15 AM - 09:30 AM</option>
+    <option value="09:30">09:30 AM - 09:45 AM</option>
+    <option value="09:45">09:45 AM - 10:00 AM</option>
+
+    <option value="10:00">10:00 AM - 10:15 AM</option>
+    <option value="10:15">10:15 AM - 10:30 AM</option>
+    <option value="10:30">10:30 AM - 10:45 AM</option>
+    <option value="10:45">10:45 AM - 11:00 AM</option>
+
+    <option value="11:00">11:00 AM - 11:15 AM</option>
+    <option value="11:15">11:15 AM - 11:30 AM</option>
+    <option value="11:30">11:30 AM - 11:45 AM</option>
+    <option value="11:45">11:45 AM - 12:00 PM</option>
+
+    <option value="12:00">12:00 PM - 12:15 PM</option>
+    <option value="12:15">12:15 PM - 12:30 PM</option>
+    <option value="12:30">12:30 PM - 12:45 PM</option>
+    <option value="12:45">12:45 PM - 01:00 PM</option>
+
+    <option value="13:00">01:00 PM - 01:15 PM</option>
+    <option value="13:15">01:15 PM - 01:30 PM</option>
+    <option value="13:30">01:30 PM - 01:45 PM</option>
+    <option value="13:45">01:45 PM - 02:00 PM</option>
+</select>
+
+                        {% if form.appointment_time.errors %}
+
+                            <div class="text-danger small mt-2">
+                                {{ form.appointment_time.errors }}
+                            </div>
+
+                        {% endif %}
+
+                        <div class="appointment-help">
+
+                            Select any time between
+                            <strong>9:00 AM and 2:00 PM.</strong>
+
+                            <br>
+
+                            Your selected time will automatically
+                            be placed into its 15-minute appointment window.
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ================= AVAILABLE SLOTS ================= -->
+
+                    {% if selected_doctor and selected_date %}
+
+                        <div class="slots-box">
+
+                            <div class="slots-title">
+
+                                🕒 Available Appointment Windows
+
+                            </div>
+
+                            <p class="text-muted small mb-3">
+
+                                Date:
+                                <strong>
+                                    {{ selected_date }}
+                                </strong>
+
+                                <br>
+
+                                Each window can accommodate
+                                <strong>6 patients.</strong>
+
+                            </p>
+
+
+                            {% for slot in available_slots %}
+
+                                <div class="slot-card">
+
+                                    <div class="row align-items-center">
+
+                                        <div class="col-md-5">
+
+                                            <div class="slot-time">
+
+                                                🕒
+                                                {{ slot.start|time:"h:i A" }}
+                                                -
+                                                {{ slot.end|time:"h:i A" }}
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="col-md-3 text-md-center">
+
+                                            <small class="text-muted">
+                                                Booked
+                                            </small>
+
+                                            <br>
+
+                                            <strong>
+                                                {{ slot.booked }}/6
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div class="col-md-4 text-md-end">
+
+                                            {% if slot.full %}
+
+                                                <span class="slot-full">
+
+                                                    🔴 FULL
+
+                                                </span>
+
+                                            {% else %}
+
+                                                <span class="slot-available">
+
+                                                    🟢
+                                                    {{ slot.available }}
+                                                    seats available
+
+                                                </span>
+
+                                            {% endif %}
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            {% empty %}
+
+                                <div class="alert alert-warning mb-0">
+
+                                    No appointment windows available
+                                    for this date.
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- ================= CAPACITY ================= -->
+
+                    <div class="capacity-box mt-4">
+
+                        <h5>
+                            ℹ️ Appointment Capacity
+                        </h5>
+
+                        <p>
+
+                            <strong>
+                                6 patients are allowed in each
+                                15-minute appointment window.
+                            </strong>
+
+                        </p>
+
+                        <small>
+
+                            Please bring your original CNIC
+                            when visiting the hospital.
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- ================= BOOK BUTTON ================= -->
+
+                    <div class="text-center mt-4">
+
+                        <button
+                            type="submit"
+                            class="btn btn-success btn-lg book-appointment-btn"
+                        >
+
+                            📅 Book Appointment
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

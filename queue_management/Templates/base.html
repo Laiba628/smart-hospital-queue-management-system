@@ -1,0 +1,834 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Smart Hospital Queue Management System
+    </title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        body {
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #f5f9ff 0%,
+                    #ffffff 100%
+                );
+
+            min-height: 100vh;
+
+            color: #212529;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .main-navbar {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0d6efd,
+                    #084298
+                );
+
+            box-shadow:
+                0 5px 20px rgba(13, 110, 253, 0.18);
+
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+        }
+
+
+        /* =====================================================
+           NAVBAR BACK BUTTON
+        ===================================================== */
+
+        .navbar-back-btn {
+
+            border: none;
+
+            background: transparent;
+
+            color: white;
+
+            width: 42px;
+            height: 42px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 24px;
+
+            margin-right: 8px;
+
+            cursor: pointer;
+
+            transition: all 0.25s ease;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .navbar-back-btn:hover {
+
+            background:
+                rgba(255, 255, 255, 0.15);
+
+            color: white;
+
+            transform: translateX(-2px);
+
+        }
+
+
+        .navbar-back-btn:active {
+
+            transform: scale(0.92);
+
+        }
+
+
+        /* =====================================================
+           BRAND
+        ===================================================== */
+
+        .navbar-brand {
+
+            font-size: 1.25rem;
+
+            letter-spacing: 0.2px;
+
+            transition: 0.25s ease;
+
+        }
+
+
+        .navbar-brand:hover {
+
+            transform: translateY(-1px);
+
+            opacity: 0.95;
+
+        }
+
+
+        /* =====================================================
+           NAV LINKS
+        ===================================================== */
+
+        .main-navbar .nav-link {
+
+            color:
+                rgba(255, 255, 255, 0.92) !important;
+
+            font-weight: 500;
+
+            padding:
+                9px 12px !important;
+
+            margin:
+                0 2px;
+
+            border-radius: 10px;
+
+            transition:
+                all 0.25s ease;
+
+        }
+
+
+        /* HOVER */
+
+        .main-navbar .nav-link:hover {
+
+            color: white !important;
+
+            background:
+                rgba(255, 255, 255, 0.12);
+
+            transform:
+                translateY(-1px);
+
+        }
+
+
+        /* =====================================================
+           ACTIVE NAV LINK
+        ===================================================== */
+
+        .main-navbar .nav-link.active {
+
+            color: #0d6efd !important;
+
+            background: white;
+
+            font-weight: 700;
+
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.12);
+
+        }
+
+
+        .main-navbar .nav-link.active:hover {
+
+            color: #0a58ca !important;
+
+            background: white;
+
+            transform:
+                translateY(-1px);
+
+        }
+
+
+        .main-navbar .nav-link i {
+
+            margin-right: 4px;
+
+        }
+
+
+        /* =====================================================
+           DROPDOWN
+        ===================================================== */
+
+        .dropdown-menu {
+
+            border: none;
+
+            border-radius: 14px;
+
+            padding: 8px;
+
+            box-shadow:
+                0 12px 30px rgba(0, 0, 0, 0.14);
+
+        }
+
+
+        .dropdown-item {
+
+            border-radius: 9px;
+
+            padding:
+                10px 13px;
+
+            transition:
+                all 0.2s ease;
+
+        }
+
+
+        .dropdown-item:hover {
+
+            background:
+                #eef5ff;
+
+            transform:
+                translateX(2px);
+
+        }
+
+
+        /* =====================================================
+           PAGE CONTENT
+        ===================================================== */
+
+        main {
+
+            min-height:
+                calc(100vh - 180px);
+
+        }
+
+
+        .page-container {
+
+            padding-top: 20px;
+
+            padding-bottom: 35px;
+
+        }
+
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        .btn {
+
+            border-radius: 10px;
+
+            transition:
+                all 0.25s ease;
+
+        }
+
+
+        .btn:hover {
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        /* =====================================================
+           CARDS
+        ===================================================== */
+
+        .card {
+
+            border-radius: 16px;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .main-footer {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #084298,
+                    #0d6efd
+                );
+
+            color: white;
+
+            box-shadow:
+                0 -5px 20px rgba(0, 0, 0, 0.06);
+
+        }
+
+
+        .footer-icon {
+
+            font-size: 28px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .footer-title {
+
+            font-weight: 700;
+
+            letter-spacing: 0.2px;
+
+        }
+
+
+        .footer-text {
+
+            opacity: 0.9;
+
+        }
+
+
+        /* =====================================================
+           TABLET / MOBILE
+        ===================================================== */
+
+        @media (max-width: 991px) {
+
+            .main-navbar .nav-link {
+
+                margin-top: 3px;
+
+                margin-bottom: 3px;
+
+            }
+
+
+            .navbar-nav {
+
+                padding-top: 8px;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           SMALL MOBILE
+        ===================================================== */
+
+        @media (max-width: 576px) {
+
+            .navbar-brand {
+
+                font-size: 1.05rem;
+
+            }
+
+
+            .page-container {
+
+                padding-top: 10px;
+
+            }
+
+
+            .navbar-back-btn {
+
+                width: 38px;
+
+                height: 38px;
+
+                font-size: 22px;
+
+                margin-right: 3px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="navbar navbar-expand-lg navbar-dark main-navbar">
+
+    <div class="container">
+
+
+        <!-- BACK BUTTON -->
+
+        {% if request.resolver_match.url_name != "home" %}
+
+            <button
+                type="button"
+                class="navbar-back-btn"
+                onclick="history.back()"
+                aria-label="Go back"
+                title="Go back"
+            >
+
+                <i class="bi bi-arrow-left"></i>
+
+            </button>
+
+        {% endif %}
+
+
+        <!-- BRAND -->
+
+        <a
+            class="navbar-brand fw-bold"
+            href="{% url 'home' %}"
+        >
+
+            🏥 Smart Hospital
+
+        </a>
+
+
+        <!-- MOBILE MENU BUTTON -->
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavbar"
+            aria-controls="mainNavbar"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <!-- NAVIGATION -->
+
+        <div
+            class="collapse navbar-collapse"
+            id="mainNavbar"
+        >
+
+
+            <!-- =================================================
+                 LEFT MENU
+            ================================================== -->
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+
+                <!-- HOME -->
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link
+                        {% if request.resolver_match.url_name == 'home' %}
+                            active
+                        {% endif %}"
+                        href="{% url 'home' %}"
+                    >
+
+                        <i class="bi bi-house-door"></i>
+
+                        Home
+
+                    </a>
+
+                </li>
+
+
+                <!-- DOCTORS -->
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link
+                        {% if request.resolver_match.url_name == 'doctor_list' or request.resolver_match.url_name == 'doctor_detail' %}
+                            active
+                        {% endif %}"
+                        href="{% url 'doctor_list' %}"
+                    >
+
+                        <i class="bi bi-person-badge"></i>
+
+                        Doctors
+
+                    </a>
+
+                </li>
+
+
+                <!-- APPOINTMENT -->
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link
+                        {% if request.resolver_match.url_name == 'book_appointment' or request.resolver_match.url_name == 'book_appointment_doctor' %}
+                            active
+                        {% endif %}"
+                        href="{% url 'book_appointment' %}"
+                    >
+
+                        <i class="bi bi-calendar-check"></i>
+
+                        Appointment
+
+                    </a>
+
+                </li>
+
+
+                <!-- QUEUE -->
+
+                {% if user.is_authenticated and user.is_staff %}
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link
+                            {% if request.resolver_match.url_name == 'queue_dashboard' %}
+                                active
+                            {% endif %}"
+                            href="{% url 'queue_dashboard' %}"
+                        >
+
+                            <i class="bi bi-bar-chart-line"></i>
+
+                            Queue
+
+                        </a>
+
+                    </li>
+
+                {% endif %}
+
+
+            </ul>
+
+
+            <!-- =================================================
+                 RIGHT MENU
+            ================================================== -->
+
+            <ul class="navbar-nav">
+
+
+                {% if user.is_authenticated %}
+
+
+                    <!-- USER DROPDOWN -->
+
+                    <li class="nav-item dropdown">
+
+                        <a
+                            class="nav-link dropdown-toggle"
+                            href="#"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+
+                            <i class="bi bi-person-circle"></i>
+
+                            {{ user.username }}
+
+                        </a>
+
+
+                        <ul
+                            class="dropdown-menu dropdown-menu-end"
+                        >
+
+
+                            <!-- PROFILE -->
+
+                            <li>
+
+                                <a
+                                    class="dropdown-item"
+                                    href="{% url 'profile' %}"
+                                >
+
+                                    <i class="bi bi-person me-2"></i>
+
+                                    My Profile
+
+                                </a>
+
+                            </li>
+
+
+                            <!-- MY APPOINTMENTS -->
+
+                            <li>
+
+                                <a
+                                    class="dropdown-item"
+                                    href="{% url 'my_appointments' %}"
+                                >
+
+                                    <i class="bi bi-calendar2-check me-2"></i>
+
+                                    My Appointments
+
+                                </a>
+
+                            </li>
+
+
+                            <!-- LOGOUT -->
+
+                            <li>
+
+                                <hr class="dropdown-divider">
+
+                            </li>
+
+
+                            <li>
+
+                                <a
+                                    class="dropdown-item text-danger"
+                                    href="{% url 'logout' %}"
+                                >
+
+                                    <i class="bi bi-box-arrow-right me-2"></i>
+
+                                    Logout
+
+                                </a>
+
+                            </li>
+
+
+                        </ul>
+
+                    </li>
+
+
+                {% else %}
+
+
+                    <!-- LOGIN -->
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link
+                            {% if request.resolver_match.url_name == 'login' %}
+                                active
+                            {% endif %}"
+                            href="{% url 'login' %}"
+                        >
+
+                            <i class="bi bi-box-arrow-in-right"></i>
+
+                            Login
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- SIGN UP -->
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link
+                            {% if request.resolver_match.url_name == 'signup' %}
+                                active
+                            {% endif %}"
+                            href="{% url 'signup' %}"
+                        >
+
+                            <i class="bi bi-person-plus"></i>
+
+                            Sign Up
+
+                        </a>
+
+                    </li>
+
+
+                {% endif %}
+
+
+            </ul>
+
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<main>
+
+    <div class="container page-container">
+
+        {% block content %}
+
+        {% endblock %}
+
+    </div>
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="main-footer text-center mt-5 py-4">
+
+    <div class="container">
+
+        <div class="footer-icon">
+
+            🏥
+
+        </div>
+
+
+        <h5 class="footer-title mb-2">
+
+            Smart Hospital Queue Management System
+
+        </h5>
+
+
+        <p class="footer-text mb-1">
+
+            Smart • Fast • Organized Healthcare
+
+        </p>
+
+
+        <small class="footer-text">
+
+            Final Year Project | Software Engineering
+
+        </small>
+
+    </div>
+
+</footer>
+
+
+<!-- =========================================================
+     BOOTSTRAP JAVASCRIPT
+========================================================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,369 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .doctor-wrapper {
+        max-width: 850px;
+        margin: 40px auto;
+    }
+
+    .doctor-card {
+        border: none;
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .doctor-header {
+        background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+        color: white;
+        padding: 35px 20px;
+        text-align: center;
+    }
+
+    /* DOCTOR PHOTO */
+
+    .doctor-photo {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid white;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.20);
+        margin-bottom: 15px;
+    }
+
+    /* DEFAULT ICON */
+
+    .doctor-icon {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.20);
+        border: 5px solid white;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        margin: 0 auto 15px auto;
+
+        font-size: 85px;
+        color: white;
+    }
+
+    .doctor-name {
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .specialization-badge {
+        font-size: 15px;
+        padding: 8px 16px;
+        border-radius: 20px;
+    }
+
+    .info-card {
+        background: #f8f9fa;
+        border-radius: 16px;
+        padding: 22px;
+        height: 100%;
+        transition: 0.3s;
+    }
+
+    .info-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .info-icon {
+        font-size: 30px;
+        color: #0d6efd;
+        margin-bottom: 8px;
+    }
+
+    .info-title {
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        color: #6c757d;
+        margin-bottom: 0;
+    }
+
+    .capacity-box {
+        border-radius: 16px;
+    }
+
+    .back-btn {
+        transition: 0.3s;
+    }
+
+    .back-btn:hover {
+        transform: translateY(-3px);
+    }
+
+</style>
+
+
+<div class="doctor-wrapper">
+
+    <div class="card doctor-card">
+
+        <!-- ================= HEADER ================= -->
+
+        <div class="doctor-header">
+
+            <!-- =========================================
+                 DOCTOR PROFILE PICTURE
+            ========================================== -->
+
+            {% if doctor.profile_picture %}
+
+                <img
+                    src="{{ doctor.profile_picture.url }}"
+                    alt="{{ doctor.full_name }}"
+                    class="doctor-photo"
+                >
+
+            {% else %}
+
+                <div class="doctor-icon">
+
+                    <i class="bi bi-person-circle"></i>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- DOCTOR NAME -->
+
+            <h2 class="doctor-name">
+
+                {{ doctor.full_name }}
+
+            </h2>
+
+
+            <!-- SPECIALIZATION -->
+
+            <span class="badge bg-light text-primary specialization-badge">
+
+                🩺 {{ doctor.specialization }}
+
+            </span>
+
+        </div>
+
+
+        <!-- ================= BODY ================= -->
+
+        <div class="card-body p-4">
+
+
+            <!-- ================= AVAILABILITY ================= -->
+
+            <div class="text-center mb-4">
+
+                {% if doctor.is_available %}
+
+                    <span class="badge bg-success fs-6 px-4 py-2">
+
+                        🟢 Available for Appointment
+
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-danger fs-6 px-4 py-2">
+
+                        🔴 Currently Unavailable
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ================= DOCTOR INFORMATION ================= -->
+
+            <div class="row g-4">
+
+
+                <!-- CONSULTATION FEE -->
+
+                <div class="col-md-6">
+
+                    <div class="info-card text-center">
+
+                        <div class="info-icon">
+
+                            <i class="bi bi-cash-stack"></i>
+
+                        </div>
+
+                        <div class="info-title">
+
+                            Consultation Fee
+
+                        </div>
+
+                        <p class="info-value">
+
+                            Rs. {{ doctor.consultation_fee }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- AVAILABLE DAYS -->
+
+                <div class="col-md-6">
+
+                    <div class="info-card text-center">
+
+                        <div class="info-icon">
+
+                            <i class="bi bi-calendar-week"></i>
+
+                        </div>
+
+                        <div class="info-title">
+
+                            Available Days
+
+                        </div>
+
+                        <p class="info-value">
+
+                            {{ doctor.available_days }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- AVAILABLE TIME -->
+
+                <div class="col-md-6">
+
+                    <div class="info-card text-center">
+
+                        <div class="info-icon">
+
+                            <i class="bi bi-clock"></i>
+
+                        </div>
+
+                        <div class="info-title">
+
+                            Available Time
+
+                        </div>
+
+                        <p class="info-value">
+
+                            {{ doctor.available_time }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DEPARTMENT -->
+
+                <div class="col-md-6">
+
+                    <div class="info-card text-center">
+
+                        <div class="info-icon">
+
+                            <i class="bi bi-heart-pulse"></i>
+
+                        </div>
+
+                        <div class="info-title">
+
+                            Department
+
+                        </div>
+
+                        <p class="info-value">
+
+                            {{ doctor.specialization }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= CAPACITY ================= -->
+
+            <div class="alert alert-info capacity-box text-center mt-4">
+
+                <h5 class="fw-bold">
+
+                    <i class="bi bi-info-circle"></i>
+
+                    Appointment Information
+
+                </h5>
+
+                <p class="mb-1">
+
+                    Up to <strong>6 patients</strong> are allowed
+                    in each <strong>15-minute</strong> appointment window.
+
+                </p>
+
+                <small>
+
+                    Please bring your original CNIC when visiting
+                    the hospital.
+
+                </small>
+
+            </div>
+
+
+            <!-- ================= BACK BUTTON ================= -->
+
+            <div class="text-center mt-4">
+
+                <a
+                    href="{% url 'doctor_list' %}"
+                    class="btn btn-outline-primary btn-lg px-4 back-btn"
+                >
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Back to Doctors
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

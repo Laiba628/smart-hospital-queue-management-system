@@ -1,0 +1,821 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .dashboard-wrapper {
+        max-width: 1400px;
+        margin: 30px auto;
+    }
+
+    .dashboard-header {
+        background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+        color: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(13, 110, 253, 0.20);
+    }
+
+    .dashboard-header h2 {
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .dashboard-header p {
+        margin-bottom: 0;
+        opacity: 0.9;
+    }
+
+    .stat-card {
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+        transition: 0.3s ease;
+        height: 100%;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-6px);
+    }
+
+    .stat-icon {
+        font-size: 38px;
+        margin-bottom: 8px;
+    }
+
+    .stat-number {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 3px;
+    }
+
+    .filter-card {
+        border: none;
+        border-radius: 18px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .filter-title {
+        font-weight: 700;
+        color: #0d6efd;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 10px;
+        padding: 10px 12px;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+    }
+
+    .table-card {
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .table thead th {
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+    .table tbody td {
+        vertical-align: middle;
+    }
+
+    .token-badge {
+        font-size: 15px;
+        padding: 7px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+    }
+
+    .status-badge {
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .update-btn {
+        border-radius: 9px;
+        transition: 0.25s ease;
+    }
+
+    .update-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .empty-box {
+        padding: 50px 20px;
+    }
+
+    .empty-icon {
+        font-size: 55px;
+        margin-bottom: 15px;
+    }
+
+    .date-navigation {
+        background: white;
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 25px;
+    }
+
+    .date-display {
+        font-size: 22px;
+        font-weight: 700;
+        color: #0d6efd;
+    }
+
+    .date-btn {
+        border-radius: 10px;
+        font-weight: 600;
+    }
+
+    .today-badge {
+        border-radius: 20px;
+        font-size: 13px;
+        padding: 7px 12px;
+    }
+
+</style>
+
+
+<div class="dashboard-wrapper">
+
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="dashboard-header">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+            <div>
+
+                <h2>
+                    🏥 Hospital Queue Dashboard
+                </h2>
+
+                <p>
+                    Manage appointments, tokens and patient queue status.
+                </p>
+
+            </div>
+
+            <div class="mt-3 mt-md-0">
+
+                <span class="badge bg-light text-primary fs-6 px-3 py-2">
+
+                    📊 Queue Management
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= DATE NAVIGATION ================= -->
+
+    <div class="date-navigation">
+
+        <div class="row align-items-center g-3">
+
+            <!-- PREVIOUS -->
+
+            <div class="col-md-3 text-md-start text-center">
+
+                <a
+                    href="?date={{ previous_date|date:'Y-m-d' }}"
+                    class="btn btn-outline-primary date-btn">
+
+                    ← Previous Day
+
+                </a>
+
+            </div>
+
+
+            <!-- CURRENT DATE -->
+
+            <div class="col-md-6 text-center">
+
+                <div class="date-display">
+
+                    📅
+                    {{ selected_date|date:"l, d F Y" }}
+
+                </div>
+
+                {% if is_today %}
+
+                    <span class="badge bg-success today-badge mt-2">
+
+                        Today
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- NEXT -->
+
+            <div class="col-md-3 text-md-end text-center">
+
+                <a
+                    href="?date={{ next_date|date:'Y-m-d' }}"
+                    class="btn btn-outline-primary date-btn">
+
+                    Next Day →
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- DATE PICKER -->
+
+        <div class="row justify-content-center mt-3">
+
+            <div class="col-md-5">
+
+                <form method="GET" class="d-flex gap-2">
+
+                    <input
+                        type="date"
+                        name="date"
+                        class="form-control"
+                        value="{{ selected_date|date:'Y-m-d' }}">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary date-btn">
+
+                        View Date
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= STATISTICS ================= -->
+
+    <div class="row g-4 mb-4">
+
+
+        <!-- TOTAL -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card stat-card shadow-sm bg-primary text-white">
+
+                <div class="card-body p-4 text-center">
+
+                    <div class="stat-icon">
+                        📋
+                    </div>
+
+                    <div class="stat-number">
+                        {{ total_appointments }}
+                    </div>
+
+                    <div>
+                        Total Appointments
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PENDING -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card stat-card shadow-sm bg-warning text-dark">
+
+                <div class="card-body p-4 text-center">
+
+                    <div class="stat-icon">
+                        ⏳
+                    </div>
+
+                    <div class="stat-number">
+                        {{ pending }}
+                    </div>
+
+                    <div>
+                        Pending
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONFIRMED -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card stat-card shadow-sm bg-success text-white">
+
+                <div class="card-body p-4 text-center">
+
+                    <div class="stat-icon">
+                        ✅
+                    </div>
+
+                    <div class="stat-number">
+                        {{ confirmed }}
+                    </div>
+
+                    <div>
+                        Confirmed
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- COMPLETED -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card stat-card shadow-sm bg-info text-white">
+
+                <div class="card-body p-4 text-center">
+
+                    <div class="stat-icon">
+                        🎉
+                    </div>
+
+                    <div class="stat-number">
+                        {{ completed }}
+                    </div>
+
+                    <div>
+                        Completed
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FILTER SECTION ================= -->
+
+    <div class="card filter-card mb-4">
+
+        <div class="card-body p-4">
+
+            <h5 class="filter-title mb-3">
+
+                🔍 Search Selected Date's Queue
+
+            </h5>
+
+
+            <form method="GET" class="row g-3">
+
+
+                <!-- KEEP DATE -->
+
+                <input
+                    type="hidden"
+                    name="date"
+                    value="{{ selected_date|date:'Y-m-d' }}">
+
+
+                <!-- TOKEN -->
+
+                <div class="col-lg-2 col-md-4">
+
+                    <label class="form-label fw-bold">
+                        Token
+                    </label>
+
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="token"
+                        placeholder="Token No."
+                        value="{{ request.GET.token }}">
+
+                </div>
+
+
+                <!-- PATIENT -->
+
+                <div class="col-lg-3 col-md-4">
+
+                    <label class="form-label fw-bold">
+                        Patient
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="patient"
+                        placeholder="Patient Name"
+                        value="{{ request.GET.patient }}">
+
+                </div>
+
+
+                <!-- DOCTOR -->
+
+                <div class="col-lg-2 col-md-4">
+
+                    <label class="form-label fw-bold">
+                        Doctor
+                    </label>
+
+                    <select
+                        name="doctor"
+                        class="form-select">
+
+                        <option value="">
+                            All Doctors
+                        </option>
+
+                        {% for doctor in doctors %}
+
+                            <option
+                                value="{{ doctor.id }}"
+                                {% if request.GET.doctor == doctor.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}>
+
+                                {{ doctor.full_name }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="col-lg-2 col-md-4">
+
+                    <label class="form-label fw-bold">
+                        Status
+                    </label>
+
+                    <select
+                        name="status"
+                        class="form-select">
+
+                        <option value="">
+                            All Status
+                        </option>
+
+                        <option
+                            value="Pending"
+                            {% if request.GET.status == "Pending" %}
+                                selected
+                            {% endif %}>
+
+                            Pending
+
+                        </option>
+
+                        <option
+                            value="Confirmed"
+                            {% if request.GET.status == "Confirmed" %}
+                                selected
+                            {% endif %}>
+
+                            Confirmed
+
+                        </option>
+
+                        <option
+                            value="Completed"
+                            {% if request.GET.status == "Completed" %}
+                                selected
+                            {% endif %}>
+
+                            Completed
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- SEARCH -->
+
+                <div class="col-lg-1 col-md-4 d-flex align-items-end">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100">
+
+                        🔍
+
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <!-- RESET -->
+
+            <div class="mt-3">
+
+                <a
+                    href="{% url 'queue_dashboard' %}"
+                    class="btn btn-outline-secondary">
+
+                    ↻ Today
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= APPOINTMENT TABLE ================= -->
+
+    <div class="card table-card">
+
+        <div class="card-header bg-white p-4">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <h5 class="fw-bold text-primary mb-0">
+
+                    📋 Queue for {{ selected_date|date:"d M Y" }}
+
+                </h5>
+
+                <span class="badge bg-primary">
+
+                    {{ appointments|length }} Records
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+
+            <div class="table-responsive">
+
+                <table class="table table-hover table-bordered mb-0">
+
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th class="text-center">
+                                Token
+                            </th>
+
+                            <th>
+                                Patient
+                            </th>
+
+                            <th>
+                                Doctor
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th class="text-center">
+                                Status
+                            </th>
+
+                            <th class="text-center">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                    {% for appointment in appointments %}
+
+                        <tr>
+
+
+                            <!-- TOKEN -->
+
+                            <td class="text-center">
+
+                                <span class="badge bg-primary token-badge">
+
+                                    🎫
+                                    {{ appointment.token_number }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- PATIENT -->
+
+                            <td>
+
+                                <strong>
+                                    👤 {{ appointment.patient.full_name }}
+                                </strong>
+
+                            </td>
+
+
+                            <!-- DOCTOR -->
+
+                            <td>
+
+                                👨‍⚕️
+                                {{ appointment.doctor.full_name }}
+
+                            </td>
+
+
+                            <!-- TIME -->
+
+                            <td>
+
+                                🕒
+                                {{ appointment.appointment_time }}
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td class="text-center">
+
+
+                                {% if appointment.status == "Pending" %}
+
+                                    <span
+                                        class="badge bg-warning text-dark status-badge">
+
+                                        ⏳ Pending
+
+                                    </span>
+
+
+                                {% elif appointment.status == "Confirmed" %}
+
+                                    <span
+                                        class="badge bg-success status-badge">
+
+                                        ✅ Confirmed
+
+                                    </span>
+
+
+                                {% elif appointment.status == "Completed" %}
+
+                                    <span
+                                        class="badge bg-primary status-badge">
+
+                                        🎉 Completed
+
+                                    </span>
+
+
+                                {% else %}
+
+                                    <span
+                                        class="badge bg-secondary status-badge">
+
+                                        {{ appointment.status }}
+
+                                    </span>
+
+                                {% endif %}
+
+
+                            </td>
+
+
+                            <!-- ACTION -->
+
+                            <td class="text-center">
+
+                                <a
+                                    href="{% url 'update_appointment' appointment.id %}"
+                                    class="btn btn-warning btn-sm update-btn">
+
+                                    ✏️ Update
+
+                                </a>
+
+                            </td>
+
+
+                        </tr>
+
+
+                    {% empty %}
+
+
+                        <!-- EMPTY -->
+
+                        <tr>
+
+                            <td colspan="6">
+
+                                <div class="text-center empty-box">
+
+                                    <div class="empty-icon">
+                                        🔍
+                                    </div>
+
+                                    <h5 class="fw-bold">
+                                        No Appointments Found
+                                    </h5>
+
+                                    <p class="text-muted mb-3">
+
+                                        No appointments are available
+                                        for {{ selected_date|date:"d F Y" }}.
+
+                                    </p>
+
+                                    <a
+                                        href="{% url 'queue_dashboard' %}"
+                                        class="btn btn-outline-primary">
+
+                                        ↻ View Today's Queue
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+
+                    {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
